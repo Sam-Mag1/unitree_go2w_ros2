@@ -1,14 +1,20 @@
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, Command
 from launch_ros.actions import Node
 import os
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     pkg_share = get_package_share_directory('go2w_description')
-    urdf_path = os.path.join(pkg_share, 'urdf', 'go2w_description.urdf')
     rviz_config = os.path.join(pkg_share, 'config', 'rviz_config.rviz')
+    
+    use_xacro = True
+
+    urdf_path = os.path.join(pkg_share, 'urdf', 'go2w_description.urdf')
+    xacro_path = os.path.join(pkg_share, 'urdf', 'go2w_description.urdf.xacro')
+
+    robot_description = Command(['xacro ', xacro_path]) if use_xacro else open(urdf_path).read()
 
     return LaunchDescription([
         DeclareLaunchArgument(
@@ -22,7 +28,7 @@ def generate_launch_description():
             package='robot_state_publisher',
             executable='robot_state_publisher',
             name='robot_state_publisher',
-            parameters=[{'robot_description': open(urdf_path).read()},
+            parameters=[{'robot_description': robot_description},
                         {'publish_frequency': 1000.0}]
         ),
 

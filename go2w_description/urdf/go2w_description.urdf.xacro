@@ -46,7 +46,7 @@
         <material name="深色橡胶_001-effect"><color rgba="0.6717055 0.6924257 0.7742702 1" /></material><material name="Material-effect"><color rgba="0.9 0.95 0.95 1" /></material>
       </visual>
       <collision>
-        <origin rpy="${PI/2.0} 0 0" xyz="0 0.08 0" />
+        <origin rpy="${PI/2.0} 0 0" xyz="0 ${hip_offset_col_y*left_sign} 0" />
         <geometry>
             <cylinder length="${hip_length}" radius="${hip_radius}" />
         </geometry>
@@ -85,7 +85,7 @@
         <material name="深色橡胶_003-effect"><color rgba="0.6717055 0.6924257 0.7742702 1" /></material><material name="Material_009-effect"><color rgba="0.9 0.95 0.95 1" /></material>
       </visual>
       <collision>
-        <origin rpy="0 ${PI/2.0} 0" xyz="0 0 ${thigh_offset_z}" />
+        <origin rpy="0 ${PI/2.0} 0" xyz="0 0 ${thigh_offset_col_z}" />
         <geometry>
           <box size="${thigh_length} ${thigh_width} ${thigh_height}" />
         </geometry>
@@ -121,7 +121,7 @@
         </material>
       </visual>
       <collision>
-        <origin rpy="0 ${calf_rotation_p} 0" xyz="${calf_offset_x} 0 ${calf_offset_z}" />
+        <origin rpy="0 ${calf_rotation_col_p} 0" xyz="${calf_offset_col_x} 0 ${calf_offset_col_z}" />
         <geometry>
           <cylinder length="${calf_length}" radius="${calf_radius}" />
         </geometry>
