@@ -97,6 +97,13 @@ int main(int argc, char **argv) {
 
     std::vector<double> efforts(16, 0.0);
 
+    std::cout << "Front Left:\tFront Right:\tRear Left:\tRear Right:\n";
+    std::cout << "0: hip\t\t4: hip\t\t8: hip\t\t12: hip\n";
+    std::cout << "1: thigh\t5: thigh\t9: thigh\t13: thigh\n";
+    std::cout << "2: calf\t\t6: calf\t\t10: calf\t14: calf\n";
+    std::cout << "3: foot\t\t7: foot\t\t11: foot\t15: foot\n";
+    std::cout << "Enter -1 to quit.\n";
+
     while (rclcpp::ok()) {
         size_t index;
         double value;
