@@ -1,0 +1,62 @@
+# FR Controllers ---------------------------------------
+FR_hip_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: FR_hip_joint
+    pid: {p: 100.0, i: 0.0, d: 5.0}
+
+FR_thigh_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: FR_thigh_joint
+    pid: {p: 300.0, i: 0.0, d: 8.0}
+
+FR_calf_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: FR_calf_joint
+    pid: {p: 300.0, i: 0.0, d: 8.0}
+
+FR_foot_controller:
+    type: unitree_legged_control/JointVelocityController
+    joint: FR_foot_joint
+    pid: {p: 10.0, i: 0.0, d: 0.1}
+
+# RL Controllers ---------------------------------------
+RL_hip_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: RL_hip_joint
+    pid: {p: 100.0, i: 0.0, d: 5.0}
+
+RL_thigh_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: RL_thigh_joint
+    pid: {p: 300.0, i: 0.0, d: 8.0}
+
+RL_calf_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: RL_calf_joint
+    pid: {p: 300.0, i: 0.0, d: 8.0}
+
+RL_foot_controller:
+    type: unitree_legged_control/JointVelocityController
+    joint: RL_foot_joint
+    pid: {p: 10.0, i: 0.0, d: 0.1}
+
+# RR Controllers ---------------------------------------
+RR_hip_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: RR_hip_joint
+    pid: {p: 100.0, i: 0.0, d: 5.0}
+
+RR_thigh_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: RR_thigh_joint
+    pid: {p: 300.0, i: 0.0, d: 8.0}
+
+RR_calf_controller:
+    type: unitree_legged_control/UnitreeJointController
+    joint: RR_calf_joint
+    pid: {p: 300.0, i: 0.0, d: 8.0}
+
+RR_foot_controller:
+    type: unitree_legged_control/JointVelocityController
+    joint: RR_foot_joint
+    pid: {p: 10.0, i: 0.0, d: 0.1}
