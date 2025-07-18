@@ -52,10 +52,10 @@ def generate_launch_description():
         parameters=[{"use_sim_time": True}]
     )
 
-    joint_trajectory_controller_spawner = Node(
+    joint_group_effort_controller_spawner = Node(
         package='controller_manager',
         executable='spawner',
-        arguments=['joint_trajectory_controller', '--controller-manager', '/controller_manager'],
+        arguments=['joint_group_effort_controller', '--controller-manager', '/controller_manager'],
         output='screen',
         parameters=[{"use_sim_time": True}]
     )
@@ -84,7 +84,7 @@ def generate_launch_description():
         robot_state_publisher_node,
         spawn_entity_node,
         joint_state_broadcaster_spawner,
-        joint_trajectory_controller_spawner,
+        joint_group_effort_controller_spawner,
         rviz_node,
         #ros2_control_node,
     ])

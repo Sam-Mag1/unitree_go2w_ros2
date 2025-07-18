@@ -3,13 +3,13 @@ controller_manager:
     use_sim_time: True
     update_rate: 100
 
-    joint_trajectory_controller:
+    joint_group_effort_controller:
       type: effort_controllers/JointGroupEffortController
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-joint_trajectory_controller:
+joint_group_effort_controller:
   ros__parameters:
     joints:
       - FL_hip_joint
