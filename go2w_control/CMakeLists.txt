@@ -1,16 +1,14 @@
 cmake_minimum_required(VERSION 3.8)
-project(go2w_description)
+project(go2w_control)
 
 # Find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
 
 install(
   DIRECTORY
-    config
     launch
-    meshes
-    urdf
+    src
   DESTINATION share/${PROJECT_NAME}
 )
 

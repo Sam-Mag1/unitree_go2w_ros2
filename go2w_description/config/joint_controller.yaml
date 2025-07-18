@@ -3,36 +3,39 @@ controller_manager:
     use_sim_time: True
     update_rate: 100
 
-    joint_trajectory_controller:
-      type: effort_controllers/JointGroupEffortController
+    joint_group_effort_controller:
+      type: joint_trajectory_controller/JointTrajectoryController
+
+    joint_group_velocity_controller:
+      type: velocity_controllers/JointGroupVelocityController
 
     joint_state_broadcaster:
       type: joint_state_broadcaster/JointStateBroadcaster
 
-joint_trajectory_controller:
+joint_group_effort_controller:
   ros__parameters:
     joints:
       - FL_hip_joint
       - FL_thigh_joint
       - FL_calf_joint
-      - FL_foot_joint
+      # - FL_foot_joint
 
       - FR_hip_joint
       - FR_thigh_joint
       - FR_calf_joint
-      - FR_foot_joint
+      # - FR_foot_joint
 
       - RL_hip_joint
       - RL_thigh_joint
       - RL_calf_joint
-      - RL_foot_joint
+      # - RL_foot_joint
 
       - RR_hip_joint
       - RR_thigh_joint
       - RR_calf_joint
-      - RR_foot_joint
+      # - RR_foot_joint
 
-    #interface_name: effort
+    # interface_name: effort
     command_interfaces: 
       - effort
     state_interfaces:
@@ -40,25 +43,25 @@ joint_trajectory_controller:
       - velocity
 
     gains:
-      FL_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      FL_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      FL_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      FL_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
+      FL_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      FL_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      FL_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      # FL_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
 
-      FR_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      FR_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      FR_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      FR_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
+      FR_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      FR_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      FR_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      # FR_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
 
-      RL_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      RL_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      RL_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      RL_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
+      RL_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      RL_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      RL_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      # RL_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
 
-      RR_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      RR_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      RR_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
-      RR_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0}
+      RR_hip_joint:    {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      RR_thigh_joint:  {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      RR_calf_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
+      # RR_foot_joint:   {p: 100.0, d: 1.0, i: 0.1, i_clamp: 1.0, ff_velocity_scale: 0.0}
 
     constraints:
       goal_time: 0.6
@@ -72,9 +75,9 @@ joint_trajectory_controller:
       FL_calf_joint:
         trajectory: 0.1
         goal: 0.05
-      FL_foot_joint:
-        trajectory: 0.1
-        goal: 0.05
+      # FL_foot_joint:
+        # trajectory: 0.1
+        # goal: 0.05
 
       FR_hip_joint:
         trajectory: 0.1
@@ -85,9 +88,9 @@ joint_trajectory_controller:
       FR_calf_joint:
         trajectory: 0.1
         goal: 0.05
-      FR_foot_joint:
-        trajectory: 0.1
-        goal: 0.05
+      # FR_foot_joint:
+        # trajectory: 0.1
+        # goal: 0.05
 
       RL_hip_joint:
         trajectory: 0.1
@@ -98,9 +101,9 @@ joint_trajectory_controller:
       RL_calf_joint:
         trajectory: 0.1
         goal: 0.05
-      RL_foot_joint:
-        trajectory: 0.1
-        goal: 0.05
+      # RL_foot_joint:
+        # trajectory: 0.1
+        # goal: 0.05
 
       RR_hip_joint:
         trajectory: 0.1
@@ -111,6 +114,21 @@ joint_trajectory_controller:
       RR_calf_joint:
         trajectory: 0.1
         goal: 0.05
-      RR_foot_joint:
-        trajectory: 0.1
-        goal: 0.05
+      # RR_foot_joint:
+        # trajectory: 0.1
+        # goal: 0.05
+
+joint_group_velocity_controller:
+  ros__parameters:
+    joints:
+      - FL_foot_joint
+      - FR_foot_joint
+      - RL_foot_joint
+      - RR_foot_joint
+
+    # interface_name: velocity
+    command_interfaces: 
+      - velocity
+    state_interfaces:
+      - position
+      - velocity

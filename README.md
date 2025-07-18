@@ -22,31 +22,26 @@ The project was tested with ROS2 Humble and Ubuntu 22.04.
         colcon build --symlink-install
         source install/setup.bash
     ```
-4. **Launch the simulation**:
+4. **Launch the simulation with Controls**:
     ```bash
-        ros2 launch go2w_description go2w_gazebo.launch.py
-    ```
-5. **Test the controls**:
-    In a new terminal:
-    ```bash*
-        source install/setup.bash
-        ros2 run go2w_description joint_publisher
+        ros2 launch go2w_control gazebo_with_control.launch.py
     ```
 
 From this point, you have the Rviz2 interface open, which shows the robot model and the joint states, and the Gazebo simulation running with the Unitree Go2W model.
 
-You can control the robot using a command line interface in the terminal where you launched the `joint_publisher`.
+You can control the robot using an IHM with sliders. The robot is controlled in position for the legs, and in velocity for the wheels.
 
 ## __/!\\ Important Note /!\\__
-The current implementation is not fully functional. The robot is controlled in effort mode, but he can't be controlled in position mode yet (so it can't stand up). 
+There is no Hihg-Level control implemented yet. The robot can move each joint independently, but it does not have any high-level commands like "walk", "stand up", etc. 
 
-If you want to test another command protocol, you can change the C++ code `unitree_go2w_ros2/go2w_description/src/joint_publisher.cpp` or add a new executable.
+At the moment, I am not sure that the torque have a "limit". The command is sent in effort to the robot to reach the desired position sent by the user, but the torque may be really high, which is not realistic. I will check how to limit the torque as soon as possible.
 
 ## To-Do List
 
 - [x] Spawn the robot in Gazebo and link Rviz2 to the simulation
 - [x] Be able to control the robot in effort mode
 - [x] Add a very basic GUI to test the robot control
+- [x] Be able to control the robot in position mode (without effort limitation)
 - [ ] Be able to control the robot in position mode (with an effort limitation)
 - [ ] Be able to control the robot with high-level commands (e.g. walk, stand up, etc.)
 
