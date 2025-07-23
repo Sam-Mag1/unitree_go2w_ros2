@@ -63,6 +63,7 @@
       <xacro:if value="${(left == False)}">
         <limit effort="${hip_torque_max}" velocity="${hip_velocity_max}" lower="${-hip_position_max}" upper="${-hip_position_min}"/>
       </xacro:if>
+      <dynamics damping="${hip_damping}" friction="${hip_friction}" />
     </joint>
 
     <!-- Thigh -->
@@ -97,6 +98,7 @@
       <child link="${prefix}_thigh" />
       <axis xyz="0 1 0" />
       <limit effort="${thigh_torque_max}" velocity="${thigh_velocity_max}" lower="${thigh_position_min}" upper="${thigh_position_max}" />
+      <dynamics damping="${thigh_damping}" friction="${thigh_friction}" />
     </joint>
 
     <!-- Calf -->
@@ -133,6 +135,7 @@
       <child link="${prefix}_calf" />
       <axis xyz="0 1 0" />
       <limit lower="${calf_position_min}" upper="${calf_position_max}" effort="${calf_torque_max}" velocity="${calf_velocity_max}" />
+      <dynamics damping="${calf_damping}" friction="${calf_friction}" />
     </joint>
 
     <!-- Calf lower -->
@@ -210,23 +213,18 @@
         </material>
       </visual>
       <collision>
-        <origin rpy="0 0 0" xyz="0 0.0 0" />
+        <origin rpy="${PI/2.0} 0 0" xyz="0 ${foot_offset_col_y*left_sign} 0" />
         <geometry>
-          <xacro:if value="${left == True}">
-            <mesh filename="${mesh_prefix}/left_wheel.dae" />
-            </xacro:if>
-            <xacro:if value="${left == False}">
-            <mesh filename="${mesh_prefix}/right_wheel.dae" />
-            </xacro:if>
+          <cylinder length="${foot_length}" radius="${foot_radius}" />
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}_foot_joint" type="continuous">
+    <joint name="${prefix}_foot_joint" type="fixed">
       <origin xyz="${foot_offset_x} ${foot_offset_y*left_sign} ${foot_offset_z}" rpy="0 0 0" />
       <parent link="${prefix}_calf" />
       <child link="${prefix}_foot" />
       <axis xyz="0 1 0" />
-        <limit effort="${foot_torque_max}" velocity="${foot_velocity_max}" />
+      <!-- <limit effort="${foot_torque_max}" velocity="${foot_velocity_max}" /> -->
     </joint>
 
     <!-- Gazebo ros2_control -->
@@ -237,44 +235,44 @@
 
       <joint name="${prefix}_hip_joint">
         <command_interface name="effort">
-          <!-- <param name="min">${hip_torque_min}</param>
-          <param name="max">${hip_torque_max}</param> -->
+          <param name="min">${-hip_torque_max}</param>
+          <param name="max">${hip_torque_max}</param>
         </command_interface>
         <state_interface name="position">
           <param name="initial_value">${hip_init_position}</param>
         </state_interface>
         <state_interface name="velocity"/>
-        <!-- <state_interface name="effort"/> -->
+        <state_interface name="effort"/>
       </joint>
         
       <joint name="${prefix}_thigh_joint">
         <command_interface name="effort">
-          <!-- <param name="min">${thigh_torque_min}</param>
-          <param name="max">${thigh_torque_max}</param> -->
+          <param name="min">${-thigh_torque_max}</param>
+          <param name="max">${thigh_torque_max}</param>
         </command_interface>
         <state_interface name="position">
           <param name="initial_value">${thigh_init_position}</param>
         </state_interface>
         <state_interface name="velocity"/>
-        <!-- <state_interface name="effort"/> -->
+        <state_interface name="effort"/>
       </joint>
         
       <joint name="${prefix}_calf_joint">
         <command_interface name="effort">
-          <!-- <param name="min">${calf_torque_min}</param>
-          <param name="max">${calf_torque_max}</param> -->
+          <param name="min">${-calf_torque_max}</param>
+          <param name="max">${calf_torque_max}</param>
         </command_interface>
         <state_interface name="position">
           <param name="initial_value">${calf_init_position}</param>
         </state_interface>
         <state_interface name="velocity"/>
-        <!-- <state_interface name="effort"/> -->
+        <state_interface name="effort"/>
       </joint>
 
       <joint name="${prefix}_foot_joint">
         <command_interface name="velocity">
-          <!-- <param name="min">-100.0</param>
-          <param name="max">100.0</param> -->
+          <param name="min">${-foot_velocity_max}</param>
+          <param name="max">${foot_velocity_max}</param>
         </command_interface>
         <state_interface name="position">
           <param name="initial_value">0.0</param>
@@ -282,7 +280,7 @@
         <state_interface name="velocity">
           <param name="initial_value">0.0</param>
         </state_interface>
-        <!-- <state_interface name="effort"/> -->
+        <state_interface name="effort"/>
       </joint>
     </ros2_control>
 

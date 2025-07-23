@@ -128,7 +128,7 @@ joint_group_velocity_controller:
 
     # interface_name: velocity
     command_interfaces: 
-      - velocity
+      - effort
     state_interfaces:
       - position
       - velocity

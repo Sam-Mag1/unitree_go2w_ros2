@@ -4,11 +4,19 @@ from std_msgs.msg import Float64MultiArray
 from trajectory_msgs.msg import JointTrajectory, JointTrajectoryPoint
 import tkinter as tk
 from tkinter import ttk
+import threading
+import sys
 
 class JointPublisher(Node):
     def __init__(self):
         super().__init__('joint_publisher')
-        self.trajectory_publisher_ = self.create_publisher(JointTrajectory, '/joint_group_effort_controller/joint_trajectory', 10)
+
+        if len(sys.argv) > 1:
+            topic_name = sys.argv[1]
+        else:
+            topic_name = '/low_level_joint_group_effort_controller/joint_trajectory'
+
+        self.trajectory_publisher_ = self.create_publisher(JointTrajectory, topic_name, 10)
         self.trajectory = [
             0.0,
             1.0143535137176514,
@@ -65,7 +73,6 @@ class JointPublisher(Node):
         self.get_logger().info(f'Velocity message published: {velocities}')
 
 def main(args=None):
-    import threading
 
     rclpy.init(args=args)
     node = JointPublisher()

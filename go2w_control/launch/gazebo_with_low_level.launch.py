@@ -16,6 +16,7 @@ def generate_launch_description():
             PythonLaunchDescriptionSource(simulation_launcher)
         ),
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(joint_publisher_launcher)
+            PythonLaunchDescriptionSource(joint_publisher_launcher),
+            launch_arguments={'topic_name': '/joint_group_effort_controller/joint_trajectory'}.items()
         ),
     ])

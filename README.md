@@ -42,7 +42,7 @@ At the moment, I am not sure that the torque have a "limit". The command is sent
 - [x] Be able to control the robot in effort mode
 - [x] Add a very basic GUI to test the robot control
 - [x] Be able to control the robot in position mode (without effort limitation)
-- [ ] Be able to control the robot in position mode (with an effort limitation)
+- [x] Be able to control the robot in position mode (with an effort limitation)
 - [ ] Be able to control the robot with high-level commands (e.g. walk, stand up, etc.)
 
 *This To-Do list is not exhaustive and will be updated as the project progresses.*
