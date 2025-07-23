@@ -24,7 +24,7 @@ The project was tested with ROS2 Humble and Ubuntu 22.04.
     ```
 4. **Launch the simulation with Controls**:
     ```bash
-        ros2 launch go2w_control gazebo_with_control.launch.py
+        ros2 launch go2w_control gazebo_with_low_level.launch.py
     ```
 
 From this point, you have the Rviz2 interface open, which shows the robot model and the joint states, and the Gazebo simulation running with the Unitree Go2W model.
