@@ -4,6 +4,7 @@ from std_msgs.msg import Float64MultiArray
 from geometry_msgs.msg import Twist
 import tkinter as tk
 from tkinter import ttk
+import threading
 
 class CmdVelPublisher(Node):
     def __init__(self):
@@ -16,7 +17,7 @@ class CmdVelPublisher(Node):
             0.0,
             0.0,
             0.0
-            ]
+        ]
         self.velocity_joint_names = [
             'FL_foot_joint',
             'FR_foot_joint',
@@ -37,11 +38,10 @@ class CmdVelPublisher(Node):
         msg = Float64MultiArray()
         msg.data = velocities
         self.velocity_publisher_.publish(msg)
+        self.get_logger().info(f'Velocity message published: {velocities}')
 
 
 def main(args=None):
-    import threading
-
     rclpy.init(args=args)
     node = CmdVelPublisher()
 
@@ -52,15 +52,16 @@ def main(args=None):
     linear_x = tk.DoubleVar(value=0.0)
     linear_y = tk.DoubleVar(value=0.0)
     angular_z = tk.DoubleVar(value=0.0)
+    velocity_vars = [tk.DoubleVar(value=0.0) for _ in node.velocity_joint_names]
 
-    def on_slider_change(_):
+    def on_slider_change(_=None):
         node.publish_cmd_vel(linear_x.get(), linear_y.get(), angular_z.get())
-        node.publish_velocity([0.0, 0.0, 0.0, 0.0])
+        velocities = [v.get() for v in velocity_vars]
+        node.publish_velocity(velocities)
     
     def on_button_click(var):
         var.set(0.0)
-        node.publish_cmd_vel(linear_x.get(), linear_y.get(), angular_z.get())
-        node.publish_velocity([0.0, 0.0, 0.0, 0.0])
+        on_slider_change()
 
     def ros_spin():
         while rclpy.ok():
@@ -70,9 +71,9 @@ def main(args=None):
     spin_thread.start()
 
     sliders_info = [
-        ("Linear  X", linear_x, -2.0, 2.0),
-        ("Linear  Y", linear_y, -2.0, 2.0),
-        ("Angular Z", angular_z, -2.0, 2.0)
+        ("Linear  X", linear_x, -0.4, 0.4),
+        ("Linear  Y", linear_y, -0.3, 0.3),
+        ("Angular Z", angular_z, -0.6, 0.6)
     ]
 
     for i, (label_text, var, minval, maxval) in enumerate(sliders_info):
@@ -84,6 +85,23 @@ def main(args=None):
         button = ttk.Button(frame, text="Reset", command=lambda v=var: on_button_click(v))
         button.pack(side='right', padx=5)
         slider = ttk.Scale(frame, from_=minval, to=maxval, orient='horizontal', variable=var,
+                           command=on_slider_change)
+        slider.pack(side='right', fill='x', expand=True, padx=5)
+        slider.configure(length=150)
+        frame.pack_propagate(False)
+        frame.configure(width=400, height=40)
+
+    # Ajout des sliders pour les velocity joints
+    velocity_label = ttk.Label(root, text="Velocity Joints")
+    velocity_label.pack(pady=(10, 0))
+    for i, joint_name in enumerate(node.velocity_joint_names):
+        frame = ttk.Frame(root)
+        frame.pack(fill='x', padx=5, pady=2)
+        label = ttk.Label(frame, text=f"{joint_name}")
+        label.pack(side='left')
+        button = ttk.Button(frame, text="Reset", command=lambda v=velocity_vars[i]: on_button_click(v))
+        button.pack(side='right', padx=5)
+        slider = ttk.Scale(frame, from_=-5.0, to=5.0, orient='horizontal', variable=velocity_vars[i],
                            command=on_slider_change)
         slider.pack(side='right', fill='x', expand=True, padx=5)
         slider.configure(length=150)

@@ -54,7 +54,7 @@
     </link>
     <joint name="${prefix}_hip_joint" type="revolute">
       <origin xyz="${hip_offset_x*front_sign} ${hip_offset_y*left_sign} ${hip_offset_z}" rpy="0 0 0" />
-      <parent link="base" />
+      <parent link="body" />
       <child link="${prefix}_hip" />
       <axis xyz="1 0 0" />
       <xacro:if value="${(left == True)}">
@@ -219,20 +219,188 @@
         </geometry>
       </collision>
     </link>
-    <joint name="${prefix}_foot_joint" type="fixed">
+    <joint name="${prefix}_foot_joint" type="continuous">
       <origin xyz="${foot_offset_x} ${foot_offset_y*left_sign} ${foot_offset_z}" rpy="0 0 0" />
       <parent link="${prefix}_calf" />
       <child link="${prefix}_foot" />
       <axis xyz="0 1 0" />
-      <!-- <limit effort="${foot_torque_max}" velocity="${foot_velocity_max}" /> -->
+      <limit effort="${foot_torque_max}" velocity="${foot_velocity_max}" />
     </joint>
+    <gazebo reference="${prefix}_foot">
+        <mu1>3</mu1>
+        <mu2>3</mu2>
+    </gazebo>
 
-    <!-- Gazebo ros2_control -->
-    <ros2_control name="${prefix}" type="system">
-      <hardware>
-      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
-      </hardware>
+  </xacro:macro>
 
+
+  <!-- Base-->
+  <link name="base"/>
+
+  <!-- Body -->
+  <link name="body">
+    <inertial>
+      <origin xyz="${body_com_x} ${body_com_y} ${body_com_z}" rpy="0 0 0" />
+      <mass value="${body_mass}" />
+      <inertia ixx="${body_ixx}" ixy="${body_ixy}" ixz="${body_ixz}" iyy="${body_iyy}" iyz="${body_iyz}" izz="${body_izz}" />
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <mesh filename="${mesh_prefix}/base.dae" />
+      </geometry>
+      <material name="深色橡胶_001-effect"><color rgba="0.6717055 0.6924257 0.7742702 1" /></material><material name="白色logo_001-effect"><color rgba="1 1 1 1" /></material><material name="黑色贴纸_007-effect"><color rgba="0.009018 0.009018 0.009018 1" /></material><material name="黑色金属_007-effect"><color rgba="0.01341 0.01341 0.01341 1" /></material><material name="黑色塑料_003-effect"><color rgba="0.023455 0.023455 0.023455 1" /></material></visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0" />
+      <geometry>
+        <box size="${body_length} ${body_width} ${body_width}" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="body_joint" type="fixed">
+    <parent link="base" />
+    <child link="body" />
+  </joint>
+
+  <!-- Head Upper-->
+  <link name="Head_upper">
+    <inertial>
+      <origin xyz="${head_upper_com_x} ${head_upper_com_y} ${head_upper_com_z}" rpy="0 0 0" />
+      <mass value="${head_upper_mass}" />
+      <inertia ixx="${head_upper_ixx}" ixy="${head_upper_ixy}" ixz="${head_upper_ixz}" iyy="${head_upper_iyy}" iyz="${head_upper_iyz}" izz="${head_upper_izz}" />
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <cylinder radius="${head_upper_radius}" length="${head_upper_length}" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Head_upper_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0.285 0 0.01" rpy="0 0 0" />
+    <parent link="body" />
+    <child link="Head_upper" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+  <!-- Head Lower -->
+  <link name="Head_lower">
+    <inertial>
+      <origin xyz="${head_lower_com_x} ${head_lower_com_y} ${head_lower_com_z}" rpy="0 0 0" />
+      <mass value="${head_lower_mass}" />
+      <inertia ixx="${head_lower_ixx}" ixy="${head_lower_ixy}" ixz="${head_lower_ixz}" iyy="${head_lower_iyy}" iyz="${head_lower_iyz}" izz="${head_lower_izz}" />
+    </inertial>
+    <collision>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <geometry>
+        <sphere radius="${head_lower_radius}" />
+      </geometry>
+    </collision>
+  </link>
+  <joint name="Head_lower_joint" type="fixed" dont_collapse="true">
+    <origin xyz="0.008 0 -0.07" rpy="0 0 0" />
+    <parent link="Head_upper" />
+    <child link="Head_lower" />
+    <axis xyz="0 0 0" />
+  </joint>
+  
+  <xacro:leg prefix="FL" front="True" left="True"/>
+  <xacro:leg prefix="FR" front="True" left="False"/>
+  <xacro:leg prefix="RL" front="False" left="True"/>
+  <xacro:leg prefix="RR" front="False" left="False"/>
+
+  <!-- IMU -->
+  <link name="imu">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+  <joint name="imu_joint" type="fixed">
+    <origin xyz="-0.02557 0 0.04232" rpy="0 0 0" />
+    <parent link="body" />
+    <child link="imu" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <gazebo reference="imu">
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <imu>
+        <angular_velocity>
+          <x>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+            </noise>
+          </x>
+          <y>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+            </noise>
+          </y>
+          <z>
+            <noise type="gaussian">
+              <mean>0.0</mean>
+              <stddev>2e-4</stddev>
+            </noise>
+          </z>
+        </angular_velocity>
+        <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </z>
+        </linear_acceleration>
+      </imu>
+      <plugin name="imu_plugin" filename="libgazebo_ros_imu_sensor.so">
+        <ros>
+          <namespace>imu</namespace>
+          <remapping>~/out:=data</remapping>
+        </ros>
+        <initial_orientation_as_reference>false</initial_orientation_as_reference>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- Radar -->
+  <link name="radar">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link>
+  <joint name="radar_joint" type="fixed">
+    <origin xyz="0.28945 0 -0.046825" rpy="0 2.8782 0" />
+    <parent link="body" />
+    <child link="radar" />
+    <axis xyz="0 0 0" />
+  </joint>
+
+  <!-- Gazebo ros2_control -->
+  <ros2_control name="gazebo_ros2_control" type="system">
+    <hardware>
+    <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+
+    <xacro:macro name="joint_ros2_control" params="prefix">
       <joint name="${prefix}_hip_joint">
         <command_interface name="effort">
           <param name="min">${-hip_torque_max}</param>
@@ -282,102 +450,18 @@
         </state_interface>
         <state_interface name="effort"/>
       </joint>
-    </ros2_control>
+    </xacro:macro>
 
-  </xacro:macro>
+    <xacro:joint_ros2_control prefix="FL"/>
+    <xacro:joint_ros2_control prefix="FR"/>
+    <xacro:joint_ros2_control prefix="RL"/>
+    <xacro:joint_ros2_control prefix="RR"/>
 
-  <link name="base">
-    <inertial>
-      <origin xyz="${base_com_x} ${base_com_y} ${base_com_z}" rpy="0 0 0" />
-      <mass value="${base_mass}" />
-      <inertia ixx="${base_ixx}" ixy="${base_ixy}" ixz="${base_ixz}" iyy="${base_iyy}" iyz="${base_iyz}" izz="${base_izz}" />
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="${mesh_prefix}/base.dae" />
-      </geometry>
-      <material name="深色橡胶_001-effect"><color rgba="0.6717055 0.6924257 0.7742702 1" /></material><material name="白色logo_001-effect"><color rgba="1 1 1 1" /></material><material name="黑色贴纸_007-effect"><color rgba="0.009018 0.009018 0.009018 1" /></material><material name="黑色金属_007-effect"><color rgba="0.01341 0.01341 0.01341 1" /></material><material name="黑色塑料_003-effect"><color rgba="0.023455 0.023455 0.023455 1" /></material></visual>
-    <collision>
-      <origin rpy="0 0 0" xyz="0 0 0" />
-      <geometry>
-        <box size="${base_length} ${base_width} ${base_width}" />
-      </geometry>
-    </collision>
-  </link>
-  <link name="Head_upper">
-    <inertial>
-      <origin xyz="${head_upper_com_x} ${head_upper_com_y} ${head_upper_com_z}" rpy="0 0 0" />
-      <mass value="${head_upper_mass}" />
-      <inertia ixx="${head_upper_ixx}" ixy="${head_upper_ixy}" ixz="${head_upper_ixz}" iyy="${head_upper_iyy}" iyz="${head_upper_iyz}" izz="${head_upper_izz}" />
-    </inertial>
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <cylinder radius="${head_upper_radius}" length="${head_upper_length}" />
-      </geometry>
-    </collision>
-  </link>
-  <joint name="Head_upper_joint" type="fixed" dont_collapse="true">
-    <origin xyz="0.285 0 0.01" rpy="0 0 0" />
-    <parent link="base" />
-    <child link="Head_upper" />
-    <axis xyz="0 0 0" />
-  </joint>
-  <link name="Head_lower">
-    <inertial>
-      <origin xyz="${head_lower_com_x} ${head_lower_com_y} ${head_lower_com_z}" rpy="0 0 0" />
-      <mass value="${head_lower_mass}" />
-      <inertia ixx="${head_lower_ixx}" ixy="${head_lower_ixy}" ixz="${head_lower_ixz}" iyy="${head_lower_iyy}" iyz="${head_lower_iyz}" izz="${head_lower_izz}" />
-    </inertial>
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <sphere radius="${head_lower_radius}" />
-      </geometry>
-    </collision>
-  </link>
-  <joint name="Head_lower_joint" type="fixed" dont_collapse="true">
-    <origin xyz="0.008 0 -0.07" rpy="0 0 0" />
-    <parent link="Head_upper" />
-    <child link="Head_lower" />
-    <axis xyz="0 0 0" />
-  </joint>
-  
-  <xacro:leg prefix="FL" front="True" left="True"/>
-  <xacro:leg prefix="FR" front="True" left="False"/>
-  <xacro:leg prefix="RL" front="False" left="True"/>
-  <xacro:leg prefix="RR" front="False" left="False"/>
+  </ros2_control>
 
-  <link name="imu">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <mass value="0" />
-      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
-    </inertial>
-  </link>
-  <joint name="imu_joint" type="fixed">
-    <origin xyz="-0.02557 0 0.04232" rpy="0 0 0" />
-    <parent link="base" />
-    <child link="imu" />
-    <axis xyz="0 0 0" />
-  </joint>
-  <link name="radar">
-    <inertial>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <mass value="0" />
-      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
-    </inertial>
-  </link>
-  <joint name="radar_joint" type="fixed">
-    <origin xyz="0.28945 0 -0.046825" rpy="0 2.8782 0" />
-    <parent link="base" />
-    <child link="radar" />
-    <axis xyz="0 0 0" />
-  </joint>
-
+  <!-- Gazebo plugin for ros2_control -->
   <gazebo>
-      <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
       <parameters>$(find go2w_description)/config/joint_controller.yaml</parameters>
     </plugin>
   </gazebo>

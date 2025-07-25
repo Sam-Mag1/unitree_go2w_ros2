@@ -1,9 +1,10 @@
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 import os
 from ament_index_python.packages import get_package_share_directory
+from launch.substitutions import LaunchConfiguration
 
 def generate_launch_description():
     
@@ -14,9 +15,17 @@ def generate_launch_description():
 
     high_level_publisher_launcher = os.path.join(get_package_share_directory('go2w_control'), 'launch', 'high_level_publisher.launch.py')
 
+    declare_world = DeclareLaunchArgument(
+        name="world",
+        default_value="default.world",
+        description="World file name to load from the worlds directory"
+    )
+
     return LaunchDescription([
+        declare_world,
         IncludeLaunchDescription(
-            PythonLaunchDescriptionSource(simulation_launcher)
+            PythonLaunchDescriptionSource(simulation_launcher),
+            launch_arguments={'world': LaunchConfiguration('world')}.items()
         ),
         IncludeLaunchDescription(
             PythonLaunchDescriptionSource(champ_bringup_launcher),

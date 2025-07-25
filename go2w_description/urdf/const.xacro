@@ -6,9 +6,9 @@
     <xacro:property name="PI" value="3.1415926535897931"/>
 
     <!-- simplified collision value -->
-    <xacro:property name="base_width" value="0.0935"/> 
-    <xacro:property name="base_length" value="0.3762"/>
-    <xacro:property name="base_width" value="0.114"/>
+    <xacro:property name="body_width" value="0.0935"/> 
+    <xacro:property name="body_length" value="0.3762"/>
+    <xacro:property name="body_width" value="0.114"/>
 
     <xacro:property name="head_upper_radius" value="0.06"/>
     <xacro:property name="head_upper_length" value="0.09"/>
@@ -105,17 +105,17 @@
     <xacro:property name="calf_init_position" value="-2.0287070274353027"/>
 
     <!-- dynamics inertial value -->
-    <!-- base -->
-    <xacro:property name="base_mass" value="6.921"/>
-    <xacro:property name="base_com_x" value="0.021112"/>
-    <xacro:property name="base_com_y" value="0.00"/>
-    <xacro:property name="base_com_z" value="-0.005366"/>
-    <xacro:property name="base_ixx" value="0.02448"/>
-    <xacro:property name="base_ixy" value="0.00012166"/>
-    <xacro:property name="base_ixz" value="0.0014849"/>
-    <xacro:property name="base_iyy" value="0.098077"/>
-    <xacro:property name="base_iyz" value="-3.12E-05"/>
-    <xacro:property name="base_izz" value="0.107"/>
+    <!-- body -->
+    <xacro:property name="body_mass" value="6.921"/>
+    <xacro:property name="body_com_x" value="0.021112"/>
+    <xacro:property name="body_com_y" value="0.00"/>
+    <xacro:property name="body_com_z" value="-0.005366"/>
+    <xacro:property name="body_ixx" value="0.02448"/>
+    <xacro:property name="body_ixy" value="0.00012166"/>
+    <xacro:property name="body_ixz" value="0.0014849"/>
+    <xacro:property name="body_iyy" value="0.098077"/>
+    <xacro:property name="body_iyz" value="-3.12E-05"/>
+    <xacro:property name="body_izz" value="0.107"/>
 
     <!-- head upper -->
     <xacro:property name="head_upper_mass" value="0.001"/>
