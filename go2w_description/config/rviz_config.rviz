@@ -3,10 +3,7 @@ Panels:
     Help Height: 70
     Name: Displays
     Property Tree Widget:
-      Expanded:
-        - /RobotModel1
-        - /TF1
-        - /TF1/Tree1/base1
+      Expanded: ~
       Splitter Ratio: 0.5852941274642944
     Tree Height: 740
   - Class: rviz_common/Selection
@@ -20,7 +17,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: ""
+    SyncSource: PointCloud2
 Visualization Manager:
   Class: ""
   Displays:
@@ -40,7 +37,7 @@ Visualization Manager:
         Z: 0
       Plane: XY
       Plane Cell Count: 10
-      Reference Frame: base
+      Reference Frame: <Fixed Frame>
       Value: true
     - Alpha: 1
       Class: rviz_default_plugins/RobotModel
@@ -214,12 +211,16 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        body:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
           Value: true
         imu:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        radar:
+        lidar:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -232,143 +233,52 @@ Visualization Manager:
       Value: true
       Visual Enabled: true
     - Class: rviz_default_plugins/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        FL_calf:
-          Value: false
-        FL_calflower:
-          Value: false
-        FL_calflower1:
-          Value: false
-        FL_foot:
-          Value: false
-        FL_foot_motor:
-          Value: false
-        FL_hip:
-          Value: false
-        FL_thigh:
-          Value: false
-        FR_calf:
-          Value: false
-        FR_calflower:
-          Value: false
-        FR_calflower1:
-          Value: false
-        FR_foot:
-          Value: false
-        FR_foot_motor:
-          Value: false
-        FR_hip:
-          Value: false
-        FR_thigh:
-          Value: false
-        Head_lower:
-          Value: false
-        Head_upper:
-          Value: false
-        RL_calf:
-          Value: false
-        RL_calflower:
-          Value: false
-        RL_calflower1:
-          Value: false
-        RL_foot:
-          Value: false
-        RL_foot_motor:
-          Value: false
-        RL_hip:
-          Value: false
-        RL_thigh:
-          Value: false
-        RR_calf:
-          Value: false
-        RR_calflower:
-          Value: false
-        RR_calflower1:
-          Value: false
-        RR_foot:
-          Value: false
-        RR_foot_motor:
-          Value: false
-        RR_hip:
-          Value: false
-        RR_thigh:
-          Value: false
-        base:
-          Value: false
-        imu:
-          Value: false
-        radar:
-          Value: false
       Marker Scale: 0.30000001192092896
       Name: TF
       Show Arrows: true
       Show Axes: true
       Show Names: true
       Tree:
-        base:
-          FL_hip:
-            FL_thigh:
-              FL_calf:
-                FL_calflower:
-                  FL_calflower1:
-                    {}
-                FL_foot:
-                  {}
-                FL_foot_motor:
-                  {}
-          FR_hip:
-            FR_thigh:
-              FR_calf:
-                FR_calflower:
-                  FR_calflower1:
-                    {}
-                FR_foot:
-                  {}
-                FR_foot_motor:
-                  {}
-          Head_upper:
-            Head_lower:
-              {}
-          RL_hip:
-            RL_thigh:
-              RL_calf:
-                RL_calflower:
-                  RL_calflower1:
-                    {}
-                RL_foot:
-                  {}
-                RL_foot_motor:
-                  {}
-          RR_hip:
-            RR_thigh:
-              RR_calf:
-                RR_calflower:
-                  RR_calflower1:
-                    {}
-                RR_foot:
-                  {}
-                RR_foot_motor:
-                  {}
-          imu:
-            {}
-          radar:
-            {}
-      Update Interval: 0
-      Value: true
-    - Class: rviz_default_plugins/MarkerArray
-      Enabled: true
-      Name: MarkerArray
-      Namespaces:
         {}
+      Update Interval: 0
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz_default_plugins/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 0
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: PointCloud2
+      Position Transformer: XYZ
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.009999999776482582
+      Style: Flat Squares
       Topic:
         Depth: 5
         Durability Policy: Volatile
+        Filter size: 10
         History Policy: Keep Last
         Reliability Policy: Reliable
-        Value: visualization_marker_array
+        Value: /lidar/scan
+      Use Fixed Frame: true
+      Use rainbow: true
       Value: true
   Enabled: true
   Global Options:
@@ -416,25 +326,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz_default_plugins/Orbit
-      Distance: 1.2734898328781128
+      Distance: 1.5191943645477295
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 0.14499999582767487
-        Y: 0.028999999165534973
-        Z: -0.14300000667572021
+        X: 0.08334283530712128
+        Y: 0.11542611569166183
+        Z: -0.08800008893013
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.05000000074505806
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.600203812122345
+      Pitch: 0.36020371317863464
       Target Frame: base
       Value: Orbit (rviz_default_plugins)
-      Yaw: 0.9099698662757874
+      Yaw: 0.9749715328216553
     Saved: ~
 Window Geometry:
   Displays:

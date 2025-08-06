@@ -57,7 +57,6 @@ def generate_launch_description():
             "-x", "0",
             "-y", "0",
             "-z", "0.8",
-            
         ],
         output="screen",
         parameters=[{"use_sim_time": True}]
@@ -108,8 +107,9 @@ def generate_launch_description():
 
     return LaunchDescription([
         declare_world,
-        gzserver_launch,
         gzclient_launch,
+        gzserver_launch,
+        #gzclient_launch,
         robot_state_publisher_node,
         spawn_entity_node,
         #ros2_control_node,

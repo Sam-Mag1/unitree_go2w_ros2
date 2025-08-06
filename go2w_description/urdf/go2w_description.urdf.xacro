@@ -374,25 +374,102 @@
           <namespace>imu</namespace>
           <remapping>~/out:=data</remapping>
         </ros>
+        <frameName>imu</frameName>
         <initial_orientation_as_reference>false</initial_orientation_as_reference>
       </plugin>
     </sensor>
   </gazebo>
 
-  <!-- Radar -->
-  <link name="radar">
+  <!-- Lidar -->
+  <link name="lidar">
     <inertial>
       <origin xyz="0 0 0" rpy="0 0 0" />
       <mass value="0" />
       <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
     </inertial>
   </link>
-  <joint name="radar_joint" type="fixed">
-    <origin xyz="0.28945 0 -0.046825" rpy="0 2.8782 0" />
+  <joint name="lidar_joint" type="fixed">
+    <origin xyz="0.28945 0 -0.046825" rpy="${PI} 2.8782 0" />
     <parent link="body" />
-    <child link="radar" />
+    <child link="lidar" />
     <axis xyz="0 0 0" />
   </joint>
+  <gazebo reference="lidar">
+    <sensor name="unitree_lidar_l1" type="ray">
+      <pose>0 0 0 0 0 0</pose>
+      <visualize>false</visualize>
+      <update_rate>10</update_rate>
+      <ray>
+        <scan>
+          <horizontal>
+            <samples>128</samples>
+            <resolution>1</resolution>
+            <min_angle>-3.14159</min_angle>
+            <max_angle>3.14159</max_angle>
+          </horizontal>
+          <vertical>
+            <samples>16</samples>
+            <resolution>1</resolution>
+            <min_angle>${-PI/2.0}</min_angle>
+            <max_angle>0</max_angle>
+          </vertical>
+        </scan>
+        <range>
+          <min>0.1</min>
+          <max>20.0</max>
+          <resolution>0.01</resolution>
+        </range>
+        <noise>
+          <type>gaussian</type>
+          <mean>0.0</mean>
+          <stddev>0.01</stddev>
+        </noise>
+      </ray>
+      <plugin name="gazebo_ros_ray_sensor" filename="libgazebo_ros_ray_sensor.so">
+        <ros>
+          <namespace>lidar</namespace>
+          <remapping>~/out:=scan</remapping>
+        </ros>
+        <frame_name>lidar</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
+
+  <!-- Camera -->
+  <link name="camera">
+    <inertial>
+      <origin xyz="0 0 0" rpy="0 0 0" />
+      <mass value="0" />
+      <inertia ixx="0" ixy="0" ixz="0" iyy="0" iyz="0" izz="0" />
+    </inertial>
+  </link> -->
+  <joint name="camera_joint" type="fixed">
+    <origin xyz="0.325 0 0.043" rpy="0 0 0" />
+    <parent link="body" />
+    <child link="camera" />
+    <axis xyz="0 0 0" />
+  </joint>
+  <gazebo reference="camera">
+    <sensor name="camera" type="camera">
+      <pose>0 0 0 0 0 0</pose>
+      <update_rate>10</update_rate>
+      <camera>
+        <horizontal_fov>2.0944</horizontal_fov>
+        <image>
+          <width>1280</width>
+          <height>720</height>
+          <format>R8G8B8</format>
+        </image>
+        <clip>
+          <near>0.1</near>
+          <far>100.0</far>
+        </clip>
+      </camera>
+      <plugin name="gazebo_ros_camera" filename="libgazebo_ros_camera.so">
+        <frame_name>camera</frame_name>
+      </plugin>
+    </sensor>
+  </gazebo>
 
   <!-- Gazebo ros2_control -->
   <ros2_control name="gazebo_ros2_control" type="system">
